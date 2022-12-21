@@ -1,3 +1,8 @@
+// doublye circular linked list final
+
+
+
+
 
 #include<iostream>
 using namespace std;
@@ -6,6 +11,7 @@ using namespace std;
 struct Node{
 int data;
 struct Node *next;
+struct Node * prev;
 };
 
 
@@ -59,6 +65,7 @@ p=p->next;
 p->next=ptr;
 ptr=(struct Node*) malloc(sizeof(struct Node)) ;
 p->next=ptr;
+ptr->prev=NULL;
 ptr->next=head;
 ptr->data=data;
 return ptr;
@@ -77,6 +84,7 @@ i++;
 
 }
 ptr->data=data;
+ptr->prev=p;
 ptr->next=p->next;
 p->next=ptr;
 return head;
@@ -91,6 +99,7 @@ while(p->next != head) {
 p=p->next;
 }
 p->next=ptr;
+ptr->prev=p;
 ptr->next=head;
 ptr->data=data;
 
@@ -118,7 +127,7 @@ ptr->data=data;
 struct Node * deleteAtFirst(struct Node * head) {
 
 struct Node * ptr=head;
-struct Node * p=head;
+struct Node * p=head->next;
 
 while(p->next != head) {
 p=p->next;
@@ -145,6 +154,8 @@ q=q->next;
 i++;
 }
 p->next=q->next;
+q->prev=p;
+
 free(q) ;
 }
 
@@ -160,24 +171,52 @@ p->next=head;
 free(q) ;
 }
 
+
+
+
+
+
+
+
+
 struct Node * sorting(struct Node * head) {
 struct Node * ptr=head;
+  
+
+struct Node * p;
+struct Node * q;
+struct Node * h=head;
+int temp;
 int i=0;
-while( ptr->next != head) {
-struct Node * p=head;
-struct Node * q=head->next;
-struct Node * temp;
-if(p->data > q->data){
-temp=p;
-p=q;
-q=temp;
+  for(p=head; p->next!=head;p=p->next){
+
+for(q=p->next; q->next!=head;q=q->next){
+  if(p->data>q->data){
+    temp=p->data;
+    p->data=q->data;
+    q->data=temp;
+   if(i==0) {
+h=p;
 }
-p=p->next;
-q=q->next;
+  }
 
 }
-
+if(q->data<p->data){
+    temp=p->data;
+    p->data=q->data;
+    q->data=temp;
+    }
+ i++;
 }
+return h;
+}
+
+  
+
+
+
+
+
 
 
 
@@ -189,6 +228,7 @@ struct Node * head;
 struct Node * second;
 struct Node * third;
 struct Node * fourth;
+struct Node * fifth;
 struct Node * ptr;
 
 //creating Nodes
@@ -196,20 +236,31 @@ head=(struct Node*) malloc(sizeof(struct Node)) ;
 second=(struct Node*) malloc(sizeof(struct Node)) ;
 third=(struct Node*) malloc(sizeof(struct Node)) ;
 fourth=(struct Node*) malloc(sizeof(struct Node)) ;
+fifth=(struct Node*) malloc(sizeof(struct Node)) ;
 
 //linking nodes
 
-head->data=777;
+head->data=7777;
+head->prev=NULL;
 head->next=second;
 second->data=11;
+second->prev=head;
 second->next=third;
+third->prev=second;
 third->data=777;
 third->next=fourth;
+fourth->prev=third;
 fourth->data=33;
-fourth->next=head;
-traverse(head) ;
+fourth->next=fifth;
+fifth->prev=fourth;
+fifth->data=300;
+fifth->next=head;
 
 traverse(head) ;
+head=sorting(head) ;
+
+traverse(head) ;
+search(head, 300) ;
 //here you can call all the functions
 
 
